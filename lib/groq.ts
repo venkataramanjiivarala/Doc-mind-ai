@@ -13,4 +13,9 @@ export function getGroqClient() {
   return groqClient;
 }
 
-export const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+export function getGroqModel(): string {
+  const model = process.env.GROQ_MODEL?.trim();
+  return model || "openai/gpt-oss-120b";
+}
+
+export const GROQ_MODEL = process.env.GROQ_MODEL?.trim() || "openai/gpt-oss-120b";

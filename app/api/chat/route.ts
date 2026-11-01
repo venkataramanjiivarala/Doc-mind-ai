@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabase/admin";
 import { embedText } from "@/lib/embeddings";
-import { getGroqClient, GROQ_MODEL } from "@/lib/groq";
+import { getGroqClient, getGroqModel } from "@/lib/groq";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
     }));
 
     const stream = await groq.chat.completions.create({
-      model: GROQ_MODEL,
+      model: getGroqModel(),
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         ...recentHistory,

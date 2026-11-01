@@ -7,16 +7,18 @@ import { createClient } from "@supabase/supabase-js";
  * into a Client Component regardless.
  */
 export function getSupabaseAdminClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
+  const rawUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "").trim();
+  const serviceRoleKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
 
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!rawUrl || !serviceRoleKey) {
     throw new Error(
       "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars."
     );
   }
 
-  return createClient(supabaseUrl, serviceRoleKey, {
+  const cleanUrl = rawUrl.replace(/\/rest\/v1\/?$/i, "").replace(/\/+$/, "");
+
+  return createClient(cleanUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 }
